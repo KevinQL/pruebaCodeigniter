@@ -14,13 +14,8 @@
   </head>
   <body>
     <div class="container">
-        <h1>PANEL CODEIGNITER</h1>
         <?= $appname; ?>
-        <!-- <form action="http://localhost/prueba2022/librarysys/welcome/create" method="post">
-            <input type="text" name="username">
-            <input type="submit" value="enviar">
-        </form> -->
-
+        <h1>MAIN PANEL LIBRARY</h1>
         <p>
             <a href="http://localhost/prueba2022/librarysys/welcome/create" class="btn btn-primary " >add item</a>
         </p>
@@ -28,7 +23,12 @@
 
 
     <div class="container">
-        <input type="text" class="form-control w-50 my-3" placeholder="ingrese código ISBN" >
+
+        <form action="<?=base_url()?>welcome/index/" class="my-3">
+            <input type="text" class="form-control m-0" id="txtSearch" value="<?=$inputisbn?>" placeholder="ingrese código ISBN">
+            <input type="button" value="BUSCAR" class="btn btn-success mt-1 d-block w-100 m-0" onclick="buscaritems()">
+        </form>
+
         <table class="table">
           <thead>
             <tr>
@@ -81,6 +81,14 @@
     -->
 
     <script>
+
+        function buscaritems(){
+            let el = document.querySelector("#txtSearch");
+            document.querySelector("#txtSearch")
+            console.log(el);
+
+            window.location.href = "<?=base_url()?>welcome/index/"+el.value; "<?=base_url()?>"
+        }
 
         function deleteItem(id){
             console.log("eliminado", id)

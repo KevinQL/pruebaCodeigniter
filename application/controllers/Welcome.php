@@ -24,16 +24,18 @@ class Welcome extends CI_Controller {
 		$this->load->database();
 	}
 
-	public function index()
+	public function index($inputisbn='')
 	{	
 		$data['appname'] = get_name();
+		$data['inputisbn'] = $inputisbn;
 
-		$query = $this->db->query('SELECT l.idLibro, l.ISBN, l.Titulo, l.NumeroEjemplares, a.NombreAutor, e.NombreEditorial, t.NombreTema 
+		$query = $this->db->query("SELECT l.idLibro, l.ISBN, l.Titulo, l.NumeroEjemplares, a.NombreAutor, e.NombreEditorial, t.NombreTema 
 									FROM libro l 
 									INNER JOIN autor a ON a.idAutor = l.idAutor 
 									INNER JOIN editorial e ON e.idEditorial = l.idEditorial
-									INNER JOIN tema t ON t.idTema = l.idTema'
-								);
+									INNER JOIN tema t ON t.idTema = l.idTema
+									WHERE l.ISBN LIKE '%$inputisbn%'
+								");
 
 		$data['allitems'] = $query->result();
 
