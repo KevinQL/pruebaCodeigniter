@@ -22,6 +22,7 @@ class Welcome extends CI_Controller {
 		parent::__construct();
 		$this->load->helper('myhelper');
 		$this->load->database();
+		$this->load->model('Library');
 	}
 
 	public function index($inputisbn='')
@@ -29,15 +30,10 @@ class Welcome extends CI_Controller {
 		$data['appname'] = get_name();
 		$data['inputisbn'] = $inputisbn;
 
-		$query = $this->db->query("SELECT l.idLibro, l.ISBN, l.Titulo, l.NumeroEjemplares, a.NombreAutor, e.NombreEditorial, t.NombreTema 
-									FROM libro l 
-									INNER JOIN autor a ON a.idAutor = l.idAutor 
-									INNER JOIN editorial e ON e.idEditorial = l.idEditorial
-									INNER JOIN tema t ON t.idTema = l.idTema
-									WHERE l.ISBN LIKE '%$inputisbn%'
-								");
-
-		$data['allitems'] = $query->result();
+		/**
+		 * Obtenemos los datos del libro autor editorial y tema.
+		 */
+		$data['allitems'] = $this->Library->get_data($data);
 
 		$this->load->view('panel', $data);
 		
@@ -45,37 +41,29 @@ class Welcome extends CI_Controller {
 
 	public function create(){
 
-		$query = $this->db->query("SELECT * FROM autor");
-		$data['allautor'] = $query->result();
-
-		$query = $this->db->query("SELECT * FROM editorial");
-		$data['alleditorial'] = $query->result();
-
-		$query = $this->db->query("SELECT * FROM tema");
-		$data['alltema'] = $query->result();
+		/**
+		 * Obtenemos items de las tablas autor editorial y tema.
+		 */
+		$data = $this->Library->get_item_select_create();
 		
 		$this->load->view('create', $data);
 	}
 
 	public function create_ready(){
-
-		$ISBN = $this->input->post('ISBN');
-		$Titulo = $this->input->post('Titulo');
-		$NumeroEjemplares = $this->input->post('NumeroEjemplares');
-		$NombreAutor = $this->input->post('NombreAutor');
-		$NombreEditorial = $this->input->post('NombreEditorial');
-		$NombreTema = $this->input->post('NombreTema');
 		
-		echo "creado " . $NombreTema ;
-
-		$query = $this->db->query("INSERT INTO libro
-									SET Titulo = '$Titulo', 
-										ISBN = '$ISBN', 
-										NumeroEjemplares = '$NumeroEjemplares', 
-										idAutor = '$NombreAutor', 
-										idEditorial = '$NombreEditorial', 
-										idTema = '$NombreTema'
-								");
+		$data = array(
+			'ISBN' => $this->input->post('ISBN'),
+			'Titulo' => $this->input->post('Titulo'),
+			'NumeroEjemplares' => $this->input->post('NumeroEjemplares'),
+			'idAutor' => $this->input->post('NombreAutor'),
+			'idEditorial' => $this->input->post('NombreEditorial'),
+			'idTema' => $this->input->post('NombreTema')
+		);
+		
+		/**
+		 * Consulta para crear un nuevo item libro
+		 */
+		$this->Library->create_library($data);
 
 		header("Location: ".base_url() );
 		
@@ -84,12 +72,7 @@ class Welcome extends CI_Controller {
 
 	public function delete($id){
 
-		$query = $this->db->query("DELETE l.* FROM libro l 
-									JOIN autor a ON a.idAutor = l.idAutor 
-									JOIN editorial e ON e.idEditorial = l.idEditorial
-									JOIN tema t ON t.idTema = l.idTema
-									WHERE l.idLibro = $id
-							");
+		$this->Library->delete_library($id);
 
 		header("Location: ".base_url() );
 	}

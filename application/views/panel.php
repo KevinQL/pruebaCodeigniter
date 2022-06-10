@@ -44,9 +44,9 @@
           </thead>
           <tbody>
             <!-- <?php var_dump($allitems); ?> -->
-            <?php foreach($allitems as $item): ?>
+            <?php $count=0; foreach($allitems as $item): ?>
             <tr>
-              <th scope="row">1</th>
+              <th scope="row"><?=++$count?></th>
               <td><?= $item->ISBN ?></td>
               <td><?= $item->Titulo ?></td>
               <td><?= $item->NumeroEjemplares ?></td>

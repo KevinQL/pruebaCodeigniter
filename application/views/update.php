@@ -15,16 +15,22 @@
     <div class="container">
         <h1>UPDATE</h1>
         <p><?=  get_name() ?></p>
-        <p><?=  base_url() ?></p>
+        <p>
+            <?php 
+                $allautor = $items_table['allautor'];
+                $alleditorial = $items_table['alleditorial'];
+                $alltema = $items_table['alltema'];
+                //var_dump($items_table) 
+            ?>
+        </p>
     </div>
 
 
     <div class="container">
 
-        <form action="<?=  base_url() ?>update/update_ready" method="post">
+        <form action="<?= base_url() ?>update/update_ready" method="post">
             <div class="form-group">
-                <label for="formGroupExampleInput">idLibro</label>
-                <input type="text" value="<?= $allitems->idLibro ?>" class="form-control" name="idLibro" id="formGroupExampleInput" placeholder="Example input placeholder">
+                <input type="hidden" value="<?= $allitems->idLibro ?>" class="form-control" name="idLibro" id="formGroupExampleInput" placeholder="Example input placeholder">
             </div>
             <div class="form-group">
                 <label for="formGroupExampleInput">ISBN</label>
@@ -38,18 +44,39 @@
                 <label for="formGroupExampleInput2">NumeroEjemplares</label>
                 <input type="text" value="<?= $allitems->NumeroEjemplares ?>" class="form-control" name="NumeroEjemplares" id="formGroupExampleInput2" placeholder="Another input placeholder">
             </div>
-            <div class="form-group">
-                <label for="formGroupExampleInput2">NombreAutor</label>
-                <input type="text" value="<?= $allitems->NombreAutor ?>" class="form-control" name="NombreAutor" id="formGroupExampleInput2" placeholder="Another input placeholder">
-            </div>
-            <div class="form-group">
-                <label for="formGroupExampleInput2">NombreEditorial</label>
-                <input type="text" value="<?= $allitems->NombreEditorial ?>" class="form-control" name="NombreEditorial" id="formGroupExampleInput2" placeholder="Another input placeholder">
-            </div>
-            <div class="form-group">
-                <label for="formGroupExampleInput2">NombreTema</label>
-                <input type="text" value="<?= $allitems->NombreTema ?>" class="form-control" name="NombreTema" id="formGroupExampleInput2" placeholder="Another input placeholder">
-            </div>
+
+    <div class="form-group">
+      <label for="NombreAutor">NombreAutor</label>
+      <select id="NombreAutor" name="NombreAutor" class="form-control">
+        <option value="<?= $allitems->idAutor ?>" selected ><?= $allitems->NombreAutor ?></option>
+
+        <?php foreach($allautor as $autor): ?>
+            <option value="<?=$autor->idAutor?>"><?=$autor->NombreAutor?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="NombreEditorial">NombreEditorial</label>
+      <select id="NombreEditorial" name="NombreEditorial" class="form-control">
+        <option value="<?= $allitems->idEditorial ?>" selected ><?= $allitems->NombreEditorial ?></option>
+
+        <?php foreach($alleditorial as $editorial): ?>
+            <option value="<?=$editorial->idEditorial?>"><?=$editorial->NombreEditorial?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="NombreTema">NombreTema</label>
+      <select id="NombreTema" name="NombreTema"  class="form-control">
+        <option value="<?= $allitems->idTema ?>" selected ><?= $allitems->NombreTema ?></option>
+        <!-- <option selected>Choose...</option> -->
+        <?php foreach($alltema as $tema): ?>
+            <option value="<?=$tema->idTema?>"><?=$tema->NombreTema?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
+
+
             <div class="form-group">
                 <input type="submit" value="update">
             </div>

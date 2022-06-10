@@ -7,6 +7,7 @@ class Update extends CI_Controller {
 		parent::__construct();
 		$this->load->helper('myhelper');
 		$this->load->database();
+		$this->load->model('Library');
 	}
 
 	public function index($idlib)
@@ -14,38 +15,25 @@ class Update extends CI_Controller {
 		$data['appname'] = get_name();
 		$data['idlib'] = $idlib;
 
-		$query = $this->db->query("SELECT l.idLibro, l.ISBN, l.Titulo, l.NumeroEjemplares, a.NombreAutor, e.NombreEditorial, t.NombreTema 
-									FROM libro l 
-									INNER JOIN autor a ON a.idAutor = l.idAutor 
-									INNER JOIN editorial e ON e.idEditorial = l.idEditorial
-									INNER JOIN tema t ON t.idTema = l.idTema
-									WHERE l.idLibro = $idlib
-								");
-
-		$data['allitems'] = $query->result()[0];
+		$data['items_table'] = $this->Library->get_item_select_create();
+		$data['allitems'] = $this->Library->getdata_to_update_library($idlib);
 
 		$this->load->view('update', $data);
 	}
 
 	public function update_ready(){
 
-		$idLibro = $this->input->post('idLibro');
-		$ISBN = $this->input->post('ISBN');
-		$Titulo = $this->input->post('Titulo');
-		$NumeroEjemplares = $this->input->post('NumeroEjemplares');
-		$NombreAutor = $this->input->post('NombreAutor');
-		$NombreEditorial = $this->input->post('NombreEditorial');
-		$NombreTema = $this->input->post('NombreTema');
+		$data = new stdClass();
 
+		$data->idLibro = $this->input->post('idLibro');
+		$data->ISBN = $this->input->post('ISBN');
+		$data->Titulo = $this->input->post('Titulo');
+		$data->NumeroEjemplares = $this->input->post('NumeroEjemplares');
+		$data->NombreAutor = $this->input->post('NombreAutor');
+		$data->NombreEditorial = $this->input->post('NombreEditorial');
+		$data->NombreTema = $this->input->post('NombreTema');
 
-		$query = $this->db->query("UPDATE libro l INNER JOIN autor a ON a.idAutor = l.idAutor 
-									INNER JOIN editorial e ON e.idEditorial = l.idEditorial
-									INNER JOIN tema t ON t.idTema = l.idTema
-									SET l.ISBN = '$ISBN', l.Titulo = '$Titulo', l.NumeroEjemplares = '$NumeroEjemplares', a.NombreAutor = '$NombreAutor', e.NombreEditorial = '$NombreEditorial', t.NombreTema = '$NombreTema'
-									WHERE l.idLibro = $idLibro
-								");
-
-		echo "update ready " . $idLibro;
+		$this->Library->update_ready_Library($data);
 
 		header("Location: ".base_url() );
 		exit;
