@@ -21,6 +21,9 @@
         </p>
     </div>
 
+    <div>
+      <?php echo validation_errors(); ?>
+    </div>
 
     <div class="container">
 

@@ -18,21 +18,29 @@
         <p><?=  base_url() ?></p>
     </div>
 
-
     <div class="container">
 
         <form action="<?=  base_url() ?>welcome/create_ready" method="post">
             <div class="form-group">
                 <label for="formGroupExampleInput">ISBN</label>
-                <input type="text" class="form-control" name="ISBN" id="formGroupExampleInput" placeholder="Example input placeholder">
+                <input type="text" class="form-control <?= (form_error('ISBN') !== '')? 'is-invalid' : 'is-valid'; ?>" name="ISBN" id="formGroupExampleInput" placeholder="Example input placeholder">
+                <div class="invalid-feedback">
+                  <?php echo form_error('ISBN'); ?>
+                </div>
             </div>
             <div class="form-group">
                 <label for="formGroupExampleInput2">Titulo</label>
-                <input type="text" class="form-control" name="Titulo" id="formGroupExampleInput2" placeholder="Another input placeholder">
-            </div>
+                <input type="text" class="form-control <?= (form_error('Titulo') !== '')? 'is-invalid' : 'is-valid'; ?>" name="Titulo" id="formGroupExampleInput2" placeholder="Another input placeholder">
+                <div class="invalid-feedback">
+                  <?php echo form_error('Titulo'); ?>
+                </div>
+              </div>
             <div class="form-group">
                 <label for="formGroupExampleInput2">NumeroEjemplares</label>
-                <input type="text" class="form-control" name="NumeroEjemplares" id="formGroupExampleInput2" placeholder="Another input placeholder">
+                <input type="text" class="form-control <?= (form_error('NumeroEjemplares') !== '')? 'is-invalid' : 'is-valid'; ?>" name="NumeroEjemplares" id="formGroupExampleInput2" placeholder="Another input placeholder">
+                <div class="invalid-feedback">
+                  <?php echo form_error('NumeroEjemplares'); ?>
+                </div>
             </div>
  
     <div class="form-group">
@@ -63,7 +71,7 @@
       </select>
     </div>
             <div class="form-group">
-                <input type="submit" value="CREATE">
+                <input type="submit" class="btn btn-primary" value="CREATE NOW">
             </div>
         </form>
 

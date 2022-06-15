@@ -20,9 +20,11 @@ class Welcome extends CI_Controller {
 	 */
 	public function __construct(){
 		parent::__construct();
-		$this->load->helper('myhelper');
+		
 		$this->load->database();
 		$this->load->model('Library');
+		$this->load->helper(array('myhelper', 'forms/get_rules'));
+		$this->load->library('form_validation');
 	}
 
 	public function index($inputisbn='')
@@ -59,13 +61,48 @@ class Welcome extends CI_Controller {
 			'idEditorial' => $this->input->post('NombreEditorial'),
 			'idTema' => $this->input->post('NombreTema')
 		);
+
+		/**
+		 * Validar campos del form de insersion
+		 */
+		$config = get_create_rules();
+		
+		$this->form_validation->set_rules($config);
 		
 		/**
 		 * Consulta para crear un nuevo item libro
 		 */
-		$this->Library->create_library($data);
+		if ($this->form_validation->run() == FALSE)
+		{
+			//En el caso de que no se logre la validación de create
 
-		header("Location: ".base_url() );
+			/**
+			 * Obtenemos items de las tablas autor editorial y tema.
+			 */
+			$data = $this->Library->get_item_select_create();
+			$this->load->view('create', $data);
+
+		}else
+		{
+			// Insertar el nuevo registro libro
+			$this->Library->create_library($data);
+			
+			/**
+			 * 
+			 * Estos parametros se requieren para imprimir la vista principal panel
+			 */
+			$data['appname'] = get_name();
+			$data['inputisbn'] = '';
+
+			/**
+			 * Obtenemos los datos del libro autor editorial y tema.
+			 */
+			$data['allitems'] = $this->Library->get_data($data);
+			$this->load->view('panel', $data);
+			
+			// header("Location: ".base_url() );
+		}
+		
 		
 	}
 
