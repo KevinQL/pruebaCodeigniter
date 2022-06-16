@@ -21,6 +21,13 @@ class Update extends CI_Controller {
 		$this->load->view('update', $data);
 	}
 
+	/**
+	 * Funcion api de prueba
+	 */
+	public function api2(){
+		echo "this is a test";
+	}
+
 	public function update_ready(){
 
 		$data = new stdClass();

@@ -17,19 +17,18 @@
         <?= $appname; ?>
         <h1>MAIN PANEL LIBRARY</h1>
         <p>
-            <a href="http://localhost/prueba2022/librarysys/welcome/create" class="btn btn-primary " >add item</a>
+            <a href="<?=base_url('welcome/create')?>" class="btn btn-primary " >add item</a>
         </p>
-    </div>
-
-    <div>
-      <?php echo validation_errors(); ?>
     </div>
 
     <div class="container">
 
-        <form action="<?=base_url()?>welcome/index/" class="my-3">
-            <input type="text" class="form-control m-0" id="txtSearch" value="<?=$inputisbn?>" placeholder="ingrese código ISBN">
-            <input type="button" value="BUSCAR" class="btn btn-success mt-1 d-block w-100 m-0" onclick="buscaritems()">
+        <form class="my-3" id="form_search_panel">
+            <input type="text" class="form-control m-0" id="txtSearch" placeholder="ingrese código ISBN">
+            <div class="invalid-feedback">
+              <!-- there going error message -->
+            </div>
+            <input type="button" value="BUSCAR" class="btn btn-success mt-1 d-block w-100 m-0" id="btn_txtSearch">
         </form>
 
         <table class="table">
@@ -42,11 +41,10 @@
               <th scope="col">NombreAutor</th>
               <th scope="col">NombreEditorial</th>
               <th scope="col">NombreTema</th>
-              <th scope="col">Actions</th>
+              <th scope="col" >Actions</th>
             </tr>
           </thead>
-          <tbody>
-            <!-- <?php var_dump($allitems); ?> -->
+          <tbody class="table-results">
             <?php $count=0; foreach($allitems as $item): ?>
             <tr>
               <th scope="row"><?=++$count?></th>
@@ -57,10 +55,12 @@
               <td><?= $item->NombreEditorial ?></td>
               <td><?= $item->NombreTema ?></td>
               <td>
-                  <form action="http://localhost/prueba2022/librarysys/update/index/<?=$item->idLibro?>" method="post">
-                    <input type="submit" value="update">
+                <form action="http://localhost/prueba2022/librarysys/update/index/<?=$item->idLibro?>" method="post">
+                  <input type="submit" value="update" class="btn btn-warning d-inline py-1 my-1" />
                 </form>
-                <input type="button" value="delete" onclick="deleteItem('<?=$item->idLibro?>')">
+              </td>
+              <td>
+                <input type="button" value="delete" class="btn btn-danger d-inline py-1 my-1" onclick="deleteItem('<?=$item->idLibro?>')">
               </td>
             </tr>
             <?php endforeach; ?>
@@ -69,29 +69,20 @@
     </div>
 
 
+    <!-- JQUERY DESDE CDN GOOGLE -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script> -->
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js" integrity="sha384-VHvPCCyXqtD5DqJeNxl2dtTyhF78xXNXdkwX1CZeRusQfRKp+tA7hAShOK/B/fQ2" crossorigin="anonymous"></script>
-    -->
+    <script src="<?php echo base_url('assets/js/panel_view.js'); ?>"></script>
+
 
     <script>
-
-        function buscaritems(){
-            let el = document.querySelector("#txtSearch");
-            document.querySelector("#txtSearch")
-            console.log(el);
-
-            window.location.href = "<?=base_url()?>welcome/index/"+el.value; "<?=base_url()?>"
-        }
 
         function deleteItem(id){
             console.log("eliminado", id)

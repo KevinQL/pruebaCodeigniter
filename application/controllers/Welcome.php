@@ -41,6 +41,37 @@ class Welcome extends CI_Controller {
 		
 	}
 
+	public function api(){
+
+		$data['inputisbn'] = $this->input->post('txt_isbn');
+
+		$config = array(
+			array(
+                'field' => 'txt_isbn',
+                'label' => 'cuadro de texto ISBN',
+                'rules' => 'required|integer|trim',
+                'errors' => array(
+                        'required' => 'Por favor ingrese en el %s, para buscar...',
+                        'integer' => 'el %s solo debe ser númerico',
+                        'trim' => 'el %s no debe estar vacio',
+                ),
+        	)
+		);
+		$this->form_validation->set_rules($config);
+
+		if ($this->form_validation->run() == FALSE) {
+			$errors = array(
+				'txt_isbn' => form_error('txt_isbn')
+			);
+			echo json_encode($errors);
+			$this->output->set_status_header(400);
+		}
+		else {
+			echo json_encode($this->Library->get_data($data));
+		}
+
+	}
+
 	public function create(){
 
 		/**
@@ -97,10 +128,8 @@ class Welcome extends CI_Controller {
 			/**
 			 * Obtenemos los datos del libro autor editorial y tema.
 			 */
-			$data['allitems'] = $this->Library->get_data($data);
-			$this->load->view('panel', $data);
 			
-			// header("Location: ".base_url() );
+			header("Location: ".base_url() );
 		}
 		
 		

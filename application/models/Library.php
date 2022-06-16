@@ -39,11 +39,13 @@ class Library extends CI_Model
         return $data;
     }
 
+
     public function create_library($data){
 
         $query = $this->db->insert("libro", $data);
 
     }
+
 
     public function delete_library($id){
 
@@ -51,6 +53,7 @@ class Library extends CI_Model
 
     }
 
+    
     /**
      * Funciones para el controller de Update
      */
