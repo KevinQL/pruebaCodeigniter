@@ -41,6 +41,10 @@ class Welcome extends CI_Controller {
 		
 	}
 
+
+	/**
+	 * Api para obtener registros de la lista de libros
+	 */
 	public function api(){
 
 		$config = array(
