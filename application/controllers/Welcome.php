@@ -43,8 +43,6 @@ class Welcome extends CI_Controller {
 
 	public function api(){
 
-		$data['inputisbn'] = $this->input->post('txt_isbn');
-
 		$config = array(
 			array(
                 'field' => 'txt_isbn',
@@ -63,11 +61,22 @@ class Welcome extends CI_Controller {
 			$errors = array(
 				'txt_isbn' => form_error('txt_isbn')
 			);
-			echo json_encode($errors);
 			$this->output->set_status_header(400);
+			echo json_encode($errors);
 		}
 		else {
-			echo json_encode($this->Library->get_data($data));
+			$data['inputisbn'] = $this->input->post('txt_isbn');
+
+			$res_query = $this->Library->get_data($data);
+			if(empty($res_query)){
+				$errors = array(
+					'msj' => 'No se encontraron registros'
+				);
+				echo json_encode($errors);
+				$this->output->set_status_header(401);
+				exit;
+			}
+			echo json_encode($res_query);
 		}
 
 	}

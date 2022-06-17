@@ -50,8 +50,16 @@
     
                 $("#form_search_panel input#txtSearch").removeClass("is-invalid");
                 if(xhr.status == 400){
+                    if($res.txt_isbn.length !== 0){
+                        $("#form_search_panel input#txtSearch").addClass("is-invalid");
+                        $("#form_search_panel div").html($res.txt_isbn);
+                    }
+                }
+
+                if(xhr.status == 401){
                     $("#form_search_panel input#txtSearch").addClass("is-invalid");
-                    $("#form_search_panel div").html($res.txt_isbn);
+                    $("#form_search_panel div").html($res.msj);
+                    $(".table-results").html('');
                 }
             },
         });
