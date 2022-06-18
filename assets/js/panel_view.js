@@ -44,24 +44,28 @@
                 $(".table-results").html(data_html);
     
             },
-            error: function(xhr){
+            statusCode: {
+                400: function(xhr){
+                    $res = JSON.parse(xhr.responseText);
+        
+                    $("#form_search_panel input#txtSearch").removeClass("is-invalid");
+                    if(xhr.status == 400){
+                        if($res.txt_isbn.length !== 0){
+                            $("#form_search_panel input#txtSearch").addClass("is-invalid");
+                            $("#form_search_panel div").html($res.txt_isbn);
+                        }
+                    }
+                },
                 
-                $res = JSON.parse(xhr.responseText);
-    
-                $("#form_search_panel input#txtSearch").removeClass("is-invalid");
-                if(xhr.status == 400){
-                    if($res.txt_isbn.length !== 0){
+                401: function(xhr) {
+                    $res = JSON.parse(xhr.responseText);
+                    if(xhr.status == 401){
                         $("#form_search_panel input#txtSearch").addClass("is-invalid");
-                        $("#form_search_panel div").html($res.txt_isbn);
+                        $("#form_search_panel div").html($res.msj);
+                        $(".table-results").html('');
                     }
                 }
-
-                if(xhr.status == 401){
-                    $("#form_search_panel input#txtSearch").addClass("is-invalid");
-                    $("#form_search_panel div").html($res.msj);
-                    $(".table-results").html('');
-                }
-            },
+            }
         });
         
     }

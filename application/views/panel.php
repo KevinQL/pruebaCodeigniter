@@ -14,8 +14,20 @@
   </head>
   <body>
     <div class="container">
+        <p>
+        <?= $this->session->email; ?>
+        </p>
         <?= $appname; ?>
         <h1>MAIN PANEL LIBRARY</h1>
+        <?php if($msj_session = $this->session->flashdata('msj_session')): ?>
+          <p>
+            <?= $msj_session; ?>
+          </p>
+        <?php endif; ?>
+
+        <p>
+          <a href="<?= base_url('login/logout'); ?>">Logout Library</a>
+        </p>
         <p>
             <a href="<?=base_url('welcome/create')?>" class="btn btn-primary " >add item</a>
         </p>

@@ -24,11 +24,20 @@ class Welcome extends CI_Controller {
 		$this->load->database();
 		$this->load->model('Library');
 		$this->load->helper(array('myhelper', 'forms/get_rules'));
-		$this->load->library('form_validation');
+		$this->load->library(array('form_validation', 'session'));
 	}
 
 	public function index($inputisbn='')
 	{	
+		/**
+		 * Varifica la session en la aplicacion
+		 */
+		if(!$this->session->userdata('is_logged')){
+			show_404();
+			exit;
+		}
+
+		
 		$data['appname'] = get_name();
 		$data['inputisbn'] = $inputisbn;
 
